@@ -1,160 +1,49 @@
-📊 Website Analytics Backend API
+# Website Analytics Backend (Beginner Scaffold)
 
-A simple, scalable, and beginner-friendly backend API for collecting website/mobile analytics events such as page visits, clicks, referrer data, and device details. Designed to be easy to integrate, secure with API keys, and ready for deployment with Docker.
+This repository is a beginner-friendly scaffold for a Website Analytics backend using:
+- Node.js + Express
+- PostgreSQL for storage
+- Redis (included in compose for caching if you extend)
+- Docker + docker-compose for local dev
+- Swagger docs at `/api/docs`
 
-🚀 Features
-🔐 API Key Management
+## Quick start (local)
+1. Copy `.env.example` to `.env` and edit if needed.
+2. Build and run with Docker (recommended for beginners):
+   ```bash
+   docker-compose build
+   docker-compose up -d
+   ```
+3. Initialize DB schema:
+   ```bash
+   docker exec -it $(docker ps -qf "ancestor=postgres:15") psql -U postgres -d analytics -f /app/db/init.sql
+   ```
+   Or run the SQL in `db/init.sql` with any Postgres client.
+4. Start the Node app (if not started by compose):
+   ```bash
+   npm install
+   npm run dev
+   ```
+5. Open `http://localhost:3000/api/docs` for API docs.
 
-Register a website/app
+## What is included
+- Basic API key registration & revoke (`/api/auth`)
+- Event ingestion endpoint (`/api/analytics/collect`)
+- Aggregation endpoints (`/api/analytics/event-summary`, `/api/analytics/user-stats`)
+- Simple rate limiting via `express-rate-limit`
+- Beginner-friendly code (easy to read + extend)
 
-Generate API keys
+## Next steps / learning tasks
+- Add proper owner authentication (e.g., Google Auth) to protect showing API keys.
+- Implement Redis caching for expensive aggregations.
+- Add background ingestion queue (e.g., BullMQ) for higher throughput.
+- Add tests (Jest + supertest) — a basic test is included in `tests/` to start from.
 
-Retrieve existing keys
-
-Revoke or regenerate keys
-
-Google Auth onboarding supported
-
-📩 Event Collection
-
-Collect analytics data:
-
-Clicks
-
-Visits
-
-Device info
-
-Referrer URLs
-
-IP address
-
-Metadata (browser, OS, screen size)
-
-High-volume and fault-tolerant ingestion
-
-API key authentication via headers
-
-📈 Analytics & Reporting
-
-Event summary endpoint
-
-User stats endpoint
-
-Time range filtering
-
-App-specific or global analytics
-
-Redis caching for faster results
-
-⚙️ Additional Features
-
-Rate limiting to prevent abuse
-
-Docker containerization
-
-Cloud deployment-ready
-
-Swagger API documentation
-
-API endpoint tests
-
-🏗️ Tech Stack
-
-Node.js (Framework: Express.js)
-
-PostgreSQL (database)
-
-Redis (caching)
-
-Docker
-
-Swagger for API docs
-
-Jest for testing
-
-📁 Project Structure
-/src  
-  /auth  
-  /analytics  
-  /middleware  
-  /database  
-  /utils  
-/tests  
-docker-compose.yml  
-Dockerfile  
-README.md  
-
-🗄️ Database Schema (Simple Overview)
-Apps Table
-
-id
-
-name
-
-apiKey
-
-revoked
-
-createdAt
-
-Events Table
-
-id
-
-appId
-
-event
-
-url
-
-referrer
-
-device
-
-ipAddress
-
-metadata (JSON)
-
-timestamp
-
-▶️ How to Run the Project
-1. Clone Repo
-git clone <your-public-repo-url>
-cd analytics-backend
-
-2. Install Dependencies
+## Run tests
+```bash
 npm install
-
-3. Create Environment File
-
-Create .env:
-
-PORT=5000
-DATABASE_URL=your_postgres_url
-REDIS_URL=your_redis_url
-JWT_SECRET=your_secret
-
-4. Start Development Server
-npm run dev
-
-5. Run With Docker
-docker-compose up --build
-
-🧪 Run Tests
 npm test
+```
 
-📚 API Documentation
-
-Swagger is available at:
-
-http://localhost:5000/api-docs
-
-🌐 Deployment
-
-The project is deployed publicly here:
-<INSERT_YOUR_DEPLOYMENT_URL>
-
-🙌 Author
-
-Built as a scalable beginner-friendly analytics backend for websites & mobile apps.
+## License
+MIT
